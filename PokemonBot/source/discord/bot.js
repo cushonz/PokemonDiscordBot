@@ -9,6 +9,7 @@ const fs = require('fs');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const gen1dex = [];
 const gen2dex = [];
+let chances;
 let pokemon;
 
 // When the client is ready, run this code (only once)
@@ -54,7 +55,12 @@ client.on('messageCreate',msg =>{
 
 			msg.channel.send(URL);
 			msg.channel.send("A wild " + pokemon.pokename +" appeared!");
+			chances = 3;
 		} else if (msg.content == "!c" || msg.content === "!C") {
+			if (chances == 0){
+				msg.channel.send("The " + pokemon.pokename + "got away! Roll for a new encounter");
+				pokemon = undefined;
+			}
 			if (pokemon != undefined) {
 				// Notify the user that a pokeball was thrown
 				msg.channel.send("@" + msg.author.tag + " throws a pokeball at the " + pokemon.pokename + "!");
@@ -67,6 +73,8 @@ client.on('messageCreate',msg =>{
 					msg.channel.send("2..");
 					msg.channel.send("1!");
 					msg.channel.send("You succesfully caught the " + pokemon.pokename + "!");
+
+					// File Modification/Creation--------------------------------------
 					fs.stat(path,function(err,stat){
 						if (err == null)
 							fs.appendFile(path, poke + "\n", err => {
@@ -79,7 +87,8 @@ client.on('messageCreate',msg =>{
 							})
 						}
 					})
-
+					//-------------------------------------------------------------------------------------------
+					// Pokemon caught and added to player inventory!
 					pokemon = undefined;
 				}
 				else{
@@ -87,6 +96,7 @@ client.on('messageCreate',msg =>{
 					msg.channel.send("2..");
 					msg.channel.send("1!");
 					msg.channel.send("You failed to catch the " + pokemon.pokename + "!");
+					chances--;
 				}
 					
 			}
