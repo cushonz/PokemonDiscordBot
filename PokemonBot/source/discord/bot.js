@@ -118,12 +118,12 @@ client.on('messageCreate',msg =>{
 				let disp = "http://play.pokemonshowdown.com/sprites/"
 				msg.channel.send(msg.author.tag + "'s Team");
 				msg.channel.send("-------------------------------");
-				let dex = 0;
+				let dexGen = 0;
 				for (let i = 0; i < mons.length-1; i++){
-					let dexEntry = findPokemon(mons[i],pokedex[dex]);
-					while (dexEntry < 0){
-						dex++;
-						dexEntry = findPokemon(mons[i],pokedex[dex]);
+					let dexEntry = findPokemon(mons[i],pokedex[dexGen]);
+					while (dexEntry < 0 && dexGen < 4){
+						dexGen++;
+						dexEntry = findPokemon(mons[i],pokedex[dexGen]);
 					}
 					let gen = pickGeneration(dexEntry)
 					console.log("generation: "+gen);
