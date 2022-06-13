@@ -7,8 +7,16 @@ const fs = require('fs');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+// Pokedex by Generation----
 const gen1dex = [];
 const gen2dex = [];
+const gen3dex = [];
+const gen4dex = [];
+const gen5dex = [];
+//-----------------------
+
+const pokedex = [gen1dex,gen2dex,gen3dex,gen4dex, gen5dex];
+
 let chances;
 let pokemon;
 
@@ -17,8 +25,14 @@ client.on('ready', function(e){
     console.log(`Logged in as ${client.user.tag}!`)
 	// Pokedex to fill
 // Populate pokedi
-	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_I_Pok%C3%A9mon",gen1dex);
-	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_II_Pok%C3%A9mon",gen2dex);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_I_Pok%C3%A9mon",pokedex[0]);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[1]);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[2]);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[3]);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[4]);
+
+
+
 })
 
 /**
@@ -42,16 +56,10 @@ client.on('messageCreate',msg =>{
 		if (msg.content === "!r" || msg.content === "!R"){
 			// Refresh URL for new sprite
 			let URL = 'http://play.pokemonshowdown.com/sprites/';
-			let x = Math.floor(Math.random()*2);
-			if (x == 0){
-				pokemon = pullPokemon(gen1dex);
-				URL = URL + 'gen1/' + pokemon.pokename.toLowerCase() + '.png';
-			}
-
-			else{
-				pokemon = pullPokemon(gen2dex);
-				URL = URL + 'gen2/' + pokemon.pokename.toLowerCase() + '.png';
-			}
+			let x = Math.floor(Math.random()*5);
+			pokemon = pullPokemon(pokedex[x]);
+			let gen = pickGeneration(pokemon.dexNumb);
+			URL = URL + 'gen' + (gen) +'/' + pokemon.pokename.toLowerCase() + '.png';
 
 			msg.channel.send(URL);
 			msg.channel.send("A wild " + pokemon.pokename +" appeared!");
@@ -115,7 +123,7 @@ client.on('messageCreate',msg =>{
 						dexEntry = findPokemon(mons[i],gen2dex);
 					}
 					let gen = pickGeneration(dexEntry)
-					console.log(dexEntry);
+					console.log("generation: "+gen);
 					msg.channel.send(disp +"gen" + gen + "/" + mons[i].toLowerCase() + ".png");
 				}
 			});

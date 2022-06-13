@@ -88,8 +88,14 @@ function pickGeneration(dexNumb){
 
     if (dexNumb > 0 && dexNumb < 151)
         return 1;
-    else
+    else if (dexNumb > 151 && dexNumb < 252)
         return 2;
+    else if (dexNumb > 252 && dexNumb < 386)
+        return 3;
+    else if (dexNumb > 386 && dexNumb < 493)
+        return 4;
+    else if (dexNumb > 493 && dexNumb < 649)
+        return 5;
 }
 
 /**
