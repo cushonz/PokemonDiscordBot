@@ -68,7 +68,6 @@ function fillDex(URL, pokedex){
             pokedex.push(mon);
             i+=6;
         }
-        pullPokemon(pokedex);
     });
 
 }
@@ -77,8 +76,6 @@ function pullPokemon(pokedex){
      let selection = Math.floor(Math.random() * pokedex.length-1);
      while (selection < 0)
          selection = Math.floor(Math.random() * pokedex.length-1);
-     console.log(selection);
-     console.log(pokedex[selection]);
      return pokedex[selection];
 }
 

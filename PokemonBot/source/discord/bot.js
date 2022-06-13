@@ -57,15 +57,17 @@ client.on('messageCreate',msg =>{
 			msg.channel.send("A wild " + pokemon.pokename +" appeared!");
 			chances = 3;
 		} else if (msg.content == "!c" || msg.content === "!C") {
+			// If out of chances, escape!
 			if (chances == 0){
 				msg.channel.send("The " + pokemon.pokename + "got away! Roll for a new encounter");
 				pokemon = undefined;
 			}
+			// This covers the event that all chances have been expended or a user attempts to catch
+			// a pokemon that hasn't been rolled for
 			if (pokemon != undefined) {
 				// Notify the user that a pokeball was thrown
 				msg.channel.send("@" + msg.author.tag + " throws a pokeball at the " + pokemon.pokename + "!");
 				let catchChance = genRand(3);
-				console.log(catchChance);
 				if (catchChance == 0) {
 					let path = "../PC/" + msg.author.tag + ".json";
 					let poke = pokemon.pokename;
