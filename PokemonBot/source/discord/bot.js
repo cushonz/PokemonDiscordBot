@@ -79,12 +79,12 @@ client.on('messageCreate',msg =>{
 				let catchChance = genRand(3);
 				if (catchChance == 0) {
 					let path = "../PC/" + msg.author.tag + ".json";
-					let poke = pokemon.pokename;
 					msg.channel.send("3...");
 					msg.channel.send("2..");
 					msg.channel.send("1!");
 					msg.channel.send("You succesfully caught the " + pokemon.pokename + "!");
-
+					pokemon.rollStats();
+					let poke = JSON.stringify(pokemon);
 					// File Modification/Creation--------------------------------------
 					fs.stat(path,function(err,stat){
 						if (err == null)
