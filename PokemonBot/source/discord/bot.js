@@ -1,7 +1,7 @@
 
 const { Client, Intents } = require('discord.js');
 const { token } = require('./config.json');
-const {pullPokemon, fillDex} = require("../webscrape");
+const {pullPokemon, fillDex, findPokemon, pickGeneration} = require("../data-collection");
 const math = require("math");
 const fs = require('fs');
 
@@ -15,7 +15,7 @@ let pokemon;
 client.on('ready', function(e){
     console.log(`Logged in as ${client.user.tag}!`)
 	// Pokedex to fill
-// Populate poked
+// Populate pokedi
 	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_I_Pok%C3%A9mon",gen1dex);
 	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_II_Pok%C3%A9mon",gen2dex);
 })
@@ -30,33 +30,12 @@ function genRand(range){
 	return random;
 }
 
-/**
- * Returns an int to represent the generation the pokemon is from
- * @param pokemon Pokemon object
- * @returns {number} Number representing generation the pokemon is from
- */
-function pickGeneration(dexNumb){
 
-	if (dexNumb > 0 && dexNumb < 151)
-		return 1;
-	else
-		return 2;
-}
 
-/**
- * Scans a given dex for a pokemon name and returns the resulting dex number (Name must be capitalized)
- * @param pokemonName Name of pokemon to search for
- * @param dex pokedex to scan
- * @returns {*} Pokedex number of found pokemon
- */
-function findPokemon(pokemonName,dex){
-	for (let i = 0; i < dex.length; i++)
-		if (dex[i].pokename == pokemonName)
-			return dex[i].dexNumb;
-	return -1;
-}
+
 
 client.on('messageCreate',msg =>{
+	// ignore all non command messages
 	if (!msg.content.startsWith("!")) return;
 	else{
 		if (msg.content === "!r" || msg.content === "!R"){
@@ -82,13 +61,25 @@ client.on('messageCreate',msg =>{
 				let catchChance = genRand(3);
 				console.log(catchChance);
 				if (catchChance == 0) {
+					let path = "../PC/" + msg.author.tag + ".json";
+					let poke = pokemon.pokename;
 					msg.channel.send("3...");
 					msg.channel.send("2..");
 					msg.channel.send("1!");
 					msg.channel.send("You succesfully caught the " + pokemon.pokename + "!");
-					fs.appendFile("../PC/" + msg.author.tag + ".json", pokemon.pokename + "\n", err => {
-						// Succesfully wrote to file
-					});
+					fs.stat(path,function(err,stat){
+						if (err == null)
+							fs.appendFile(path, poke + "\n", err => {
+								// Succesfully wrote to file
+							});
+						else if (err.code === 'ENOENT'){
+							fs.writeFile(path, poke + "\n", err => {
+								// If file does not exit make a new one and write
+								//caught pokemons name
+							})
+						}
+					})
+
 					pokemon = undefined;
 				}
 				else{

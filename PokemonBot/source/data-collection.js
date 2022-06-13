@@ -82,13 +82,34 @@ function pullPokemon(pokedex){
      return pokedex[selection];
 }
 
-// Pokedex to fill
-const gen1dex= []
-// Populate poked
-fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_I_Pok%C3%A9mon",gen1dex);
+/**
+ * Returns an int to represent the generation the pokemon is from
+ * @param pokemon Pokemon object
+ * @returns {number} Number representing generation the pokemon is from
+ */
+function pickGeneration(dexNumb){
+
+    if (dexNumb > 0 && dexNumb < 151)
+        return 1;
+    else
+        return 2;
+}
+
+/**
+ * Scans a given dex for a pokemon name and returns the resulting dex number (Name must be capitalized)
+ * @param pokemonName Name of pokemon to search for
+ * @param dex pokedex to scan
+ * @returns {*} Pokedex number of found pokemon
+ */
+function findPokemon(pokemonName,dex){
+    for (let i = 0; i < dex.length; i++)
+        if (dex[i].pokename == pokemonName)
+            return dex[i].dexNumb;
+    return -1;
+}
 
 
 exports.pullPokemon = pullPokemon;
 exports.fillDex = fillDex;
-
-
+exports.findPokemon = findPokemon;
+exports.pickGeneration = pickGeneration;
