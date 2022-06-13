@@ -29,6 +29,10 @@ class Pokemon{
         this.lvl = math.floor(Math.random() * 20);
     }
 
+    generateMoveset(){
+
+    }
+
 
     get name(){
         return this.pokename;
