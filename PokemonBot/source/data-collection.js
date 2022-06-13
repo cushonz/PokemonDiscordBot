@@ -85,8 +85,8 @@ function pullPokemon(pokedex){
  * @returns {number} Number representing generation the pokemon is from
  */
 function pickGeneration(dexNumb){
-
-    if (dexNumb > 0 && dexNumb < 151)
+    console.log(dexNumb);
+    if (dexNumb > 0 && dexNumb <= 151)
         return 1;
     else if (dexNumb > 151 && dexNumb < 252)
         return 2;

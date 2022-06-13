@@ -26,9 +26,9 @@ client.on('ready', function(e){
 	// Pokedex to fill
 // Populate pokedi
 	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_I_Pok%C3%A9mon",pokedex[0]);
-	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[1]);
-	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[2]);
-	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[3]);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_II_Pok%C3%A9mon",pokedex[1]);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_III_Pok%C3%A9mon",pokedex[2]);
+	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_IV_Pok%C3%A9mon",pokedex[3]);
 	fillDex("https://pokemon.fandom.com/wiki/List_of_Generation_V_Pok%C3%A9mon",pokedex[4]);
 
 
@@ -53,6 +53,7 @@ client.on('messageCreate',msg =>{
 	// ignore all non command messages
 	if (!msg.content.startsWith("!")) return;
 	else{
+		console.log(gen4dex[4]);
 		if (msg.content === "!r" || msg.content === "!R"){
 			// Refresh URL for new sprite
 			let URL = 'http://play.pokemonshowdown.com/sprites/';
@@ -117,10 +118,12 @@ client.on('messageCreate',msg =>{
 				let disp = "http://play.pokemonshowdown.com/sprites/"
 				msg.channel.send(msg.author.tag + "'s Team");
 				msg.channel.send("-------------------------------");
+				let dex = 0;
 				for (let i = 0; i < mons.length-1; i++){
-					let dexEntry = findPokemon(mons[i],gen1dex);
-					if (dexEntry == -1){
-						dexEntry = findPokemon(mons[i],gen2dex);
+					let dexEntry = findPokemon(mons[i],pokedex[dex]);
+					while (dexEntry < 0){
+						dex++;
+						dexEntry = findPokemon(mons[i],pokedex[dex]);
 					}
 					let gen = pickGeneration(dexEntry)
 					console.log("generation: "+gen);
