@@ -88,11 +88,11 @@ client.on('messageCreate',msg =>{
 					// File Modification/Creation--------------------------------------
 					fs.stat(path,function(err,stat){
 						if (err == null)
-							fs.appendFile(path, poke + "\n", err => {
+							fs.appendFile(path, poke + ",\n", err => {
 								// Succesfully wrote to file
 							});
 						else if (err.code === 'ENOENT'){
-							fs.writeFile(path, poke + "\n", err => {
+							fs.writeFile(path, poke + ",\n", err => {
 								// If file does not exit make a new one and write
 								//caught pokemons name
 							})
@@ -113,21 +113,23 @@ client.on('messageCreate',msg =>{
 			}
 		} else if (msg.content == "!pokemon"){
 			fs.readFile("../PC/" + msg.author.tag + ".json", 'utf-8',function(err,data){
-				let mons = data.split('\n');
+				let x = data.split(',\n');
+				let mon;
 
 				let disp = "http://play.pokemonshowdown.com/sprites/"
 				msg.channel.send(msg.author.tag + "'s Team");
 				msg.channel.send("-------------------------------");
 				let dexGen = 0;
-				for (let i = 0; i < mons.length-1; i++){
-					let dexEntry = findPokemon(mons[i],pokedex[dexGen]);
+				for (let i = 0; i < x.length-1; i++){
+					mon = JSON.parse(x[i]);
+					let dexEntry = findPokemon(mon['pokename'],pokedex[dexGen]);
 					while (dexEntry < 0 && dexGen < 4){
 						dexGen++;
-						dexEntry = findPokemon(mons[i],pokedex[dexGen]);
+						dexEntry = findPokemon(mon['pokename'],pokedex[dexGen]);
 					}
 					let gen = pickGeneration(dexEntry)
 					console.log("generation: "+gen);
-					msg.channel.send(disp +"gen" + gen + "/" + mons[i].toLowerCase() + ".png");
+					msg.channel.send(disp +"gen" + gen + "/" + mon['pokename'].toLowerCase() + ".png");
 				}
 			});
 		}
