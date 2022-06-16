@@ -4,6 +4,8 @@ const { token } = require('./config.json');
 const {pullPokemon, fillDex, findPokemon, pickGeneration} = require("../data-collection");
 const math = require("math");
 const fs = require('fs');
+const {getMoves} = require("../pokemonScripts/getMoves");
+const Move = require("../pokemonScripts/moves");
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -47,8 +49,6 @@ function genRand(range){
 
 
 
-
-
 client.on('messageCreate',msg =>{
 	// ignore all non command messages
 	if (!msg.content.startsWith("!")) return;
@@ -61,7 +61,6 @@ client.on('messageCreate',msg =>{
 			pokemon = pullPokemon(pokedex[x]);
 			let gen = pickGeneration(pokemon.dexNumb);
 			URL = URL + 'gen' + (gen) +'/' + pokemon.pokename.toLowerCase() + '.png';
-
 			msg.channel.send(URL);
 			msg.channel.send("A wild " + pokemon.pokename +" appeared!");
 			chances = 3;
@@ -84,6 +83,7 @@ client.on('messageCreate',msg =>{
 					msg.channel.send("1!");
 					msg.channel.send("You succesfully caught the " + pokemon.pokename + "!");
 					pokemon.rollStats();
+					let pname = pokemon.pokename;
 					let poke = JSON.stringify(pokemon);
 					// File Modification/Creation--------------------------------------
 					fs.stat(path,function(err,stat){

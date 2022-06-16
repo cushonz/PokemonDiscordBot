@@ -6,41 +6,10 @@ const Move = require('./pokemonScripts/moves');
 const axios = require("axios");
 const cheerio = require("cheerio");
 const math = require("math");
+const {getMoves} = require('./pokemonScripts/getMoves');
 
-/**
- * Retrives all moves a given pokemon can learn
- * @param pokemon a Pokemon object
- * @param learnable array to be populated with learnable moveset
- * @returns {*[]} List of moves the pokemon can learn
- */
 
-function getMoves(pokemon,learnable){
-    // URL to scrape
-    const URL = encodeURI('https://pokemon.fandom.com/wiki/'+pokemon.name);
-    let lvl, name, power, accuracy, PP, type, category;
 
-    axios.get(URL).then((response) => {
-        const $ = cheerio.load(response.data);
-        let moves = $('td').text().split("\n");
-        for (let i = 92; i < moves.length;){
-            lvl = moves[i];
-            name = moves[i+1];
-            power = moves[i+2];
-            accuracy = moves[i+3];
-            PP = moves[i+4];
-            type = moves[i+5];
-            category = moves[i+6];
-
-            let newMove = new Move(lvl, name, power, accuracy, PP, type, category);
-            if (newMove.level.length > 3){
-                return;
-            }
-            else
-                learnable.push(newMove);
-            i+=7;
-        }
-    })
-}
 
 /**
  * Populates given array with pokemon data

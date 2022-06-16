@@ -1,6 +1,5 @@
 class Move {
-    constructor(lvl, name, power, accuracy, PP, type, category) {
-        this.level = lvl;
+    constructor(name, power, accuracy, PP, type, category) {
         this.name = name;
         this.power = power;
         this.accuracy = accuracy;
