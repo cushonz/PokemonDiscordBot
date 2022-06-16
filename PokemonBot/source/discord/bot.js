@@ -75,14 +75,16 @@ client.on('messageCreate',msg =>{
 			if (pokemon != undefined) {
 				// Notify the user that a pokeball was thrown
 				msg.channel.send("@" + msg.author.tag + " throws a pokeball at the " + pokemon.pokename + "!");
-				let catchChance = genRand(3);
+				let catchChance = genRand(0);
 				if (catchChance == 0) {
 					let path = "../PC/" + msg.author.tag + ".json";
 					msg.channel.send("3...");
 					msg.channel.send("2..");
 					msg.channel.send("1!");
 					msg.channel.send("You succesfully caught the " + pokemon.pokename + "!");
-					pokemon.rollStats();
+					//pokemon.rollStats();
+					pokemon.randomMove('../data/pokemonMoves.json');
+					console.log(pokemon.moves);
 					let pname = pokemon.pokename;
 					let poke = JSON.stringify(pokemon);
 					// File Modification/Creation--------------------------------------

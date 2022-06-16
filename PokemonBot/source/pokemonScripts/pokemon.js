@@ -7,16 +7,15 @@ const Move = require("./moves");
  */
 
 class Pokemon{
-    moves =[];
+
     constructor(name, type1, type2 ,id) {
         this.pokename = name;
         this.type1 = type1;
         this.type2 = type2;
         this.dexNumb = id;
         this.lvl = 1;
+        this.rollStats();
         this.randomMove('../data/pokemonMoves.json');
-
-
     }
 
     /**
@@ -29,11 +28,15 @@ class Pokemon{
         return random;
     }
 
+
+
+
     /**
      * Returns a random move from the dictionary of possible moves
      * @param path path to move file in json format
      */
     randomMove(path){
+        const moves_ = [];
         fs.readFile(path, 'utf-8',function(err, jsonData){
             if (err){
                 console.log("File read failed: ",err)
@@ -44,7 +47,6 @@ class Pokemon{
             let moveData = jsonData.split("\n");
 
             let name,type,category,pp,acc,power;
-            let moves = [];
             for (let i = 0; i < 4; i++){
                 let selection = math.floor((math.random()*164));
 
@@ -58,14 +60,13 @@ class Pokemon{
 
 
                 let move = new Move(name,power,acc,pp,type,category);
-                moves.push(move);
+                moves_.push(move);
             }
+            this.moves = moves_;
         });
     }
 
-    addMove(moveArr){
-        this.moves = {moveArr};
-    }
+
 
     rollStats(){
         this.health = math.floor(Math.random() * 80);
